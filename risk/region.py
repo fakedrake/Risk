@@ -12,20 +12,25 @@ class Region(object):
         self.owner = owner
         self.ring_roll = ring_roll
 
+    def __str__(self):
+        return self.name
+
 class Continent(object):
     """ A continent class.
     """
 
     def __init__(self, name, regions=[], bonus=0, json_dic=None):
         """Create a continent which is basically an collection of regions that
-        gives some bonus.
+        gives some bonus. Regions are region names.
         """
         self.name = name
-        self.regions = regions
-        self.bonus = bonus
 
         if json_dic is not None:
-            json_dic['regions']
+            self.regions = json_dic['regions']
+            self.bonus = json_dic['bonus']
+        else:
+            self.regions = regions
+            self.bonus = bonus
 
 
     def regions(self):
