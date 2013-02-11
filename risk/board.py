@@ -1,11 +1,14 @@
 import json
 from random import randint
 
+from ring import Ring
+from region import Region, Continent, Map
+
 class Board(object):
     """The board thet manages the game
     """
 
-    def __init__(self, players, regions_file, gui):
+    def __init__(self, players, regions_file, ring_file, gui):
         """Initialize the board with a list of player objects, a file with the
         region grid in json format and a gui.
         """
@@ -13,10 +16,13 @@ class Board(object):
         self.regions_file = regions_file
         self.continents, self.map = self.parse_regions(regions_file)
 
+        self.ring = Ring(self.path(ring_file))
+
         self.gui = gui
 
     def parse_regions(self, regions_file):
-        """Given a Regions file, parse the reguion grid.
+        """Given a Regions file, parse the region grid and return a
+        list of continents and a Map.
         """
         regions = nx.Graph()
         continents = []
@@ -25,14 +31,23 @@ class Board(object):
 
             for cont_name, attrs in data.iteritems():
                 continents.append( Continent(cont_name, json=attrs) )
-                for region, neighbors in continents[-1].regions():
+                for region, neighbors in continents[-1].region_connections():
                     regions.add_region(region, neighbors)
 
         return continents, regions
 
-    def player_regions(self, player):
-        """ Get the regions owned by the player. """
-        return [i for i in self.map.regions() if i.owner == player]
+    def get_region(self, region_name):
+        """Return the region object from the region name."""
+        return self.map.regions[region_name]
+
+    def path(self, fn):
+        """Return a path of regions from a json list file."""
+        with f as open(fn):
+            return [self.get_region(i) for i in json.loads(f.read())]
+
+    def empire(self, player):
+        """Get a map of the regions owned by the player."""
+        return self.map.empire(player)
 
 
 class BattleException(Exception):

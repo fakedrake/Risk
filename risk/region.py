@@ -4,13 +4,14 @@ class Region(object):
     """A region on the map.
     """
 
-    def __init__(self, name, stronghold=False, troops=0, owner=None, ring_roll=False):
+    def __init__(self, name, stronghold=False, troops=0, owner=None, ring_roll=False, ring_roll_base=3):
         """Set the name.
         """
         self.name = name
         self.troops = troops
         self.owner = owner
         self.ring_roll = ring_roll
+        self.ring_roll_base = ring_roll_base
         self.stronghold = stronghold
 
     def modifier(self, attacking):
@@ -27,7 +28,6 @@ class Region(object):
 
     def __str__(self):
         return self.name
-
 
 
 class Continent(object):
@@ -57,15 +57,10 @@ class Continent(object):
 
             if r['stronghold'] == "true":
                 stronghold = True
-            if r["ring_roll"] == "true":
-                ring_roll = True
 
-            ret.append((Region(r["name"], stronghold=stronghold, ring_roll=ring_roll), r["neighbors"]))
+            ret.append((Region(r["name"], stronghold=stronghold), r["neighbors"]))
 
         return ret
-
-
-
 
 
 class Map(object):
