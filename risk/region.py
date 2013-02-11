@@ -53,7 +53,7 @@ class Continent(object):
         for r in regions:
             stronghold  = False
 
-            if r['stronghold'] == "true":
+            if r['stronghold'] == "yes":
                 stronghold = True
 
             ret.append((Region(r["name"], stronghold=stronghold), r["neighbors"]))

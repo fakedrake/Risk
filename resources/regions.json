@@ -1,0 +1,12 @@
+[
+    {"name":"AA",
+     "bonus":2,
+     "regions": [
+	 {"name":"A", "stronghold":"yes", "neighbors":["C", "D", "E"]},
+     	 {"name":"B", "stronghold":"yes", "neighbors":["C", "D", "E"]},
+	 {"name":"C", "stronghold":"yes", "neighbors":["B", "D", "E"]},
+	 {"name":"D", "stronghold":"yes", "neighbors":["C", "A", "E"]},
+	 {"name":"E", "stronghold":"yes", "neighbors":["C", "D", "B"]}
+     ]
+    }
+]
