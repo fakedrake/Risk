@@ -14,10 +14,10 @@ class Ring(object):
         self.iter = iter(path)
         self.position = path[0]
 
-    def move(self):
+    def move(self, force=False):
         """Move and return the (dice result or None, wether it moved). """
         roll = None
-        if self.position.ring_roll:
+        if self.position.ring_roll and not force:
             roll = randint(1,6)
             if roll <= self.position.ring_roll_base:
                 return (roll, False)
