@@ -1,3 +1,5 @@
+from random import randint
+
 from regions import Region
 
 
