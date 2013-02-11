@@ -4,16 +4,31 @@ class Region(object):
     """A region on the map.
     """
 
-    def __init__(self, name, troops=0, owner=None, ring_roll=False):
+    def __init__(self, name, stronghold=False, troops=0, owner=None, ring_roll=False):
         """Set the name.
         """
         self.name = name
         self.troops = troops
         self.owner = owner
         self.ring_roll = ring_roll
+        self.stronghold = stronghold
+
+    def modifier(self, attacking):
+        """Get the modifier of the highest die given wether it is
+        attacking or defending."""
+        ret = 0
+        if self.owner.leader_in(self):
+            ret += 1
+
+        if not attacking and self.stronghold:
+            ret += 1
+
+        return ret
 
     def __str__(self):
         return self.name
+
+
 
 class Continent(object):
     """ A continent class.

@@ -108,8 +108,8 @@ class BattleManager(object):
         attack = sorted([randint(1,6) for i in range(atk_tr)], reverse=True)
         defend = sorted([randint(1,6) for i in range(def_tr)], reverse=True)
 
-        attack[0] += self.attacker.modifier()
-        defend[0] += self.defender.modifier()
+        attack[0] += self.attacker.modifier(True)
+        defend[0] += self.defender.modifier(False)
 
         atk_cas = 0
         def_cas = 0
