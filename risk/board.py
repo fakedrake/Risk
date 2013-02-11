@@ -40,7 +40,8 @@ class BattleException(Exception):
         self.message = message
 
 class BattleManager(object):
-    """ Manage the battle process.
+    """ Manage the battle process. Set regions, set troops, roll,
+    query victory, claim
     """
 
     def __init__(self, attacker, defender, attack_troops=None, defend_troops=None):
@@ -92,8 +93,10 @@ class BattleManager(object):
 
         return self.casualties
 
-    def roll(self):
-        """Roll the dice and update the casualties."""
+    def roll(self, apply_casualties=True):
+        """Roll the dice and update the casualties. If
+        apply_casualties is true(default), update the attacker and
+        defender troops."""
 
         atk_tr, def_tr = self.troops
         if atk_tr is None or def_tr is None:
@@ -102,8 +105,11 @@ class BattleManager(object):
         if not ( 0 < atk_tr <= 3 and 0 < def_tr <= 2):
             raise BattleException("Fighting troops out of range")
 
-        attack = sorted([randint(1,6) for i in range(atk_tr)])
-        defend = sorted([randint(1,6) for i in range(def_tr)])
+        attack = sorted([randint(1,6) for i in range(atk_tr)], reverse=True)
+        defend = sorted([randint(1,6) for i in range(def_tr)], reverse=True)
+
+        attack[0] += self.attacker.modifier()
+        defend[0] += self.defender.modifier()
 
         atk_cas = 0
         def_cas = 0
@@ -114,3 +120,28 @@ class BattleManager(object):
                 def_cas += 1
 
         self.casualties = (atk_cas, def_cas)
+
+        if apply_casualties:
+            self.attacker.troops -= atk_cas
+            self.defender.troops -= def_cas
+
+    def victory(self):
+        """Return true if the defender was annihilated. """
+        return (self.defender.troops == 0)
+
+    def claim(self, troops):
+        """The attacker claims the defender sending troops to the
+        defending area. A BattleException is raised if the defender is
+        still standing or if the battle has not yet commenced. """
+        if self.casualties is None:
+            raise BattleException("Battle not yet fought")
+
+        if self.defender.troops > 0:
+            raise BattleException("Defender %s(player: %s) has still %d troops" % (self.defender, self.defender.owner, self.defender.troops))
+
+        if not (0 < troops < self.attacker.troops):
+            raise BattleException("You cannot move %d troops from a region with %d troops" % (troops, self.attacker.troops))
+
+        self.attacker.troops -= troops
+        self.defender.troops = troops
+        self.defender.owner = self.attacker.owner
