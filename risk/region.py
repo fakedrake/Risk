@@ -48,23 +48,41 @@ class Continent(object):
             self.bonus = bonus
 
 
-    def regions(self):
-        """Return a list of tuples of each region and it's neighbors."""
+    def region_connections(self):
+        """Return a list of tuples of each region object and it's
+        neighbors' names."""
+        ret = []
+        for r in regions:
+            stronghold = ring_roll = False
+
+            if r['stronghold'] == "true":
+                stronghold = True
+            if r["ring_roll"] == "true":
+                ring_roll = True
+
+            ret.append((Region(r["name"], stronghold=stronghold, ring_roll=ring_roll), r["neighbors"]))
+
+        return ret
+
+
+
 
 
 class Map(object):
     """ The map of regions, agnostic to all other gameplay elements.
     """
 
-    def __init__(self):
-        """ Initialize the map.
+    def __init__(self, regions={}, net=nx.Graph()):
+        """ Initialize the map given a map of region names to region
+        objects and a network of region names. Note that the region
+        dict may have more regions that the graph but not less.
         """
-        self.regions = {}
-        self.net = nx.Graph()
+        self.regions = regions
+        self.net = net
 
     def add_region(self, region, connections=[]):
-        """Add a region object to the map. Given a region object and the names of
-        the adjacent regions.
+        """Add a region object to the map. Given a region object and
+        the names of the adjacent regions.
         """
         self.regions[region.name] = region
         self.net.add_node(region.name)
@@ -72,8 +90,8 @@ class Map(object):
             self.add_edge(region.name, c)
 
     def neighbors(self, region):
-        """Return a list or neighboring region names. Works with region objects or
-        strings.
+        """Return a list or neighboring region names. Works with
+        region objects or strings.
         """
         try:
             name = region.name
@@ -81,3 +99,9 @@ class Map(object):
             name = region
 
         return self.net.neighbors(name)
+
+    def empire(self, player):
+        """Return a graph with a player's empire."""
+        region_names = self.net.subgraph([i.name for i in player.regions()])
+
+        return Map(region_names, self.regions)
