@@ -2,8 +2,8 @@ import pygame
 from pygame.locals import *
 
 class Gui(object):
-    """Draws the board from image in resources. Gets user input and updates the
-    board accordingly
+    """Draws the board from image in resources. Gets user input whenever needed
+    and updates the board accordingly.
     """
 
     def __init__(self, image_file):
@@ -22,8 +22,8 @@ class Gui(object):
         window.blit(board_image, (0,0))
         pygame.display.update()
 
-        pygame.event.set_allowed(None)    #Ignore all events
-        pygame.event.set_allowed(MOUSEBUTTONDOWN)   #Except mouse clicks
+        pygame.event.set_allowed(None)                      #Ignore all events
+        pygame.event.set_allowed(MOUSEBUTTONDOWN)           #except mouse clicks
 
     def get_user_input(self):
         """Get user input and return it in meaningful way (for example region obj)
@@ -36,13 +36,9 @@ class Gui(object):
         return self.evaluate_input(click)
 
     def evaluate_input(self, click):
-        """Evaluates user input and returns something the game loop can understand
-        
-        Arguments:
-        - `click`: MOUSEBUTTONDOWN event to be evaluated
+        """Evaluates user input and returns something the game loop can understand.        
         """
 
         # Need to implement a mapping system to recognize what a given mouse
-        # position needs
-
+        # position means
         return None
