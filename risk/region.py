@@ -4,14 +4,12 @@ class Region(object):
     """A region on the map.
     """
 
-    def __init__(self, name, stronghold=False, troops=0, owner=None, ring_roll=False, ring_roll_base=3):
+    def __init__(self, name, stronghold=False, troops=0, owner=None):
         """Set the name.
         """
         self.name = name
         self.troops = troops
         self.owner = owner
-        self.ring_roll = ring_roll
-        self.ring_roll_base = ring_roll_base
         self.stronghold = stronghold
 
     def modifier(self, attacking):
@@ -53,7 +51,7 @@ class Continent(object):
         neighbors' names."""
         ret = []
         for r in regions:
-            stronghold = ring_roll = False
+            stronghold  = False
 
             if r['stronghold'] == "true":
                 stronghold = True
