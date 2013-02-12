@@ -1,11 +1,22 @@
 import random
+import json
 import player
 
-class Deck:
+class RegionDeck(object):
+    """A deck of region cards
+    """
 
-    def inp(self,f):
+    def __init__(self):
+        """
+        """
+        pass
+
+    def read_file(self,f):
+        """Read cards from json file.
+        """
+        
         with open(f,'r') as d:
-            cards = d.readlines()
+            json_inp = json.loads(d.read())
         return cards
 
     def shuffle(self,d):
@@ -18,7 +29,7 @@ class Deck:
                 nd.write(i)
 
     def pick(self):
-        cards = self.inp('new.txt')
+        cards = self.read_file('new.txt')
         if cards:
             card = cards.pop(0)
             self.write(cards)
@@ -72,22 +83,23 @@ class PlayerCards:
         print "You take ", reinf, "reinforcements!"
         return reinf
 
-        
-deck = Deck()
-cards = deck.inp('RiskCards.txt')
-deck.shuffle(cards)
-deck.write(cards)
-print cards            
-#card = deck.pick()
-#print card
-#players = int(raw_input("How many players?\n"))
-playerc1=[]
-playerc2=[]
-playerc3=[]
-playerc4=[]
-playercards1 = PlayerCards(playerc1)
-playercards2 = PlayerCards(playerc2)
-playercards3 = PlayerCards(playerc3)
-playercards4 = PlayerCards(playerc4)
-
-#playercards1.draw(deck)
+if __name__=="__main__":        
+    deck = Deck()
+    cards = deck.read_file('RiskCards.txt')
+    deck.shuffle(cards)
+    deck.write(cards)
+    print cards            
+    #card = deck.pick()
+    #print card
+    #players = int(raw_input("How many players?\n"))
+    playerc1=[]
+    playerc2=[]
+    playerc3=[]
+    playerc4=[]
+    playercards1 = PlayerCards(playerc1)
+    playercards2 = PlayerCards(playerc2)
+    playercards3 = PlayerCards(playerc3)
+    playercards4 = PlayerCards(playerc4)
+    
+    #playercards1.draw(deck)
+    
