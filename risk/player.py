@@ -3,12 +3,11 @@ class Player(object):
     will be requesting the board for each move.
     """
 
-    def __init__(self, name, color, leaders=[] reinforcements=0):
+    def __init__(self, name, color, leaders=[], reinforcements=0):
         """ Create a player given a name and a color.
         """
         self.name = name
         self.color = color
-        self.board = board
         self.leaders = leaders
 
         self.reinforcements = reinforcements

@@ -50,7 +50,7 @@ class Continent(object):
         """Return a list of tuples of each region object and it's
         neighbors' names."""
         ret = []
-        for r in regions:
+        for r in self.regions:
             stronghold  = False
 
             if r['stronghold'] == "yes":
@@ -80,7 +80,7 @@ class Map(object):
         self.regions[region.name] = region
         self.net.add_node(region.name)
         for c in connections:
-            self.add_edge(region.name, c)
+            self.net.add_edge(region.name, c)
 
     def neighbors(self, region):
         """Return a list or neighboring region names. Works with

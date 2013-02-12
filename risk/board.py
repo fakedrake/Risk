@@ -1,4 +1,6 @@
 import json
+import networkx as nx
+
 from random import randint
 
 from ring import Ring
@@ -16,7 +18,7 @@ class Board(object):
         self.regions_file = regions_file
         self.continents, self.map = self.parse_regions(regions_file)
 
-        self.ring = Ring(self.path(ring_file))
+        self.ring = Ring(self, ring_file)
 
         self.gui = gui
 
@@ -24,13 +26,13 @@ class Board(object):
         """Given a Regions file, parse the region grid and return a
         list of continents and a Map.
         """
-        regions = nx.Graph()
+        regions = Map()
         continents = []
-        with f as open(regions_file):
+        with open(regions_file) as f:
             data = json.loads(f.read())
 
-            for cont_name, attrs in data.iteritems():
-                continents.append( Continent(cont_name, json=attrs) )
+            for continent in data:
+                continents.append( Continent(continent['name'], json_dic=continent) )
                 for region, neighbors in continents[-1].region_connections():
                     regions.add_region(region, neighbors)
 
@@ -40,18 +42,13 @@ class Board(object):
         """Return the region object from the region name."""
         return self.map.regions[region_name]
 
-    def path(self, fn):
-        """Return a path of regions from a json list file."""
-        with f as open(fn):
-            return [self.get_region(i) for i in json.loads(f.read())]
-
     def empire(self, player):
         """Get a map of the regions owned by the player."""
         return self.map.empire(player)
 
 
 class BattleException(Exception):
-    def __init__(self, message)
+    def __init__(self, message):
         self.message = message
 
 class BattleManager(object):

@@ -18,11 +18,10 @@ setup(
     keywords = "risk game",
     url = "http://packages.python.org/Risk",
     packages=['risk', 'risk.test'],
-    install_requires=['nose'],
-    long_description=read('README.md'),
-    test_suite='pyrametros.test',
+    install_requires=['nose', 'networkx'],
+    long_description=read('README.txt'),
+    test_suite='risk.test',
     classifiers=[
         "Programming Language :: Python :: 2.7",
-"License :: OSI Approved :: GNU General Public License v2 (GPLv2)"
     ],
 )
