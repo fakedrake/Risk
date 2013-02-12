@@ -26,10 +26,6 @@ class Player(object):
     def spawn_leader(self, region):
         self.leaders.append(region)
 
-    def regions(self):
-        """Return the player's regions as objects."""
-        return self.board.regions(self)
-
     def __str__(self):
         return self.name
 

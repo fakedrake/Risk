@@ -93,8 +93,14 @@ class Map(object):
 
         return self.net.neighbors(name)
 
+    def region_list(self):
+        """Return a list of the region objects known."""
+        # remember regions dict may know many more regions
+        # than the ones in the graph
+        return [self.regions[i] for i in self.net.nodes()]
+
     def empire(self, player):
         """Return a graph with a player's empire."""
-        region_names = self.net.subgraph([i.name for i in player.regions()])
+        region_names = self.net.subgraph([i for i in self.net.nodes() if self.regions[i].owner == player])
 
-        return Map(region_names, self.regions)
+        return Map(self.regions, region_names)

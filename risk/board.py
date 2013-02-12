@@ -38,13 +38,30 @@ class Board(object):
 
         return continents, regions
 
-    def get_region(self, region_name):
-        """Return the region object from the region name."""
-        return self.map.regions[region_name]
+    def get_region(self, region):
+        """Return the region object from the region name. If it is a
+        region object the corresponding board's region obj is
+        returned. """
+
+        return self.map.regions[region]
+
+    def neighbors(self, region):
+        """Get the neighbors of a region in objects. Accepts string or region object."""
+        return [self.get_region(i) for i in self.map.neighbors(region)]
 
     def empire(self, player):
         """Get a map of the regions owned by the player."""
         return self.map.empire(player)
+
+    def reinforce(self, region, troops=1, player=None):
+        """Region (name or object) is reinforced. If player is set the region is
+        converted to that player's."""
+        r = self.get_region(region)
+
+        r.troops += troops
+        if player is not None:
+            r.owner = player
+
 
 
 class BattleException(Exception):
