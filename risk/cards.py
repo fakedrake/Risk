@@ -17,71 +17,40 @@ class RegionDeck(object):
         
         with open(f,'r') as d:
             json_inp = json.loads(d.read())
-        return cards
+        return [RegionCard(**c) for c in json_inp]
 
-    def shuffle(self,d):
-        random.shuffle(d)
-        return d
+    def shuffle(self):
+        """Shuffle the deck in place
+        """
+        random.shuffle(self.cards)
 
-    def write(self, d):
-        with open('new.txt','w') as nd:
-            for i in d:
-                nd.write(i)
+    def draw(self):
+        """Draw a single card from the deck and return it.
+        """
 
-    def pick(self):
-        cards = self.read_file('new.txt')
-        if cards:
-            card = cards.pop(0)
-            self.write(cards)
-            return card
-        else:
-            print 'no cards'
-            
+        if not self.cards:
+            self.cards = self.discard_pile
+            self.discard_pile = []
+            self.shuffle()
+        return self.cards.pop(0)
     
-class PlayerCards:    
-    def __init__(self, playerc):
-        self.playerc = playerc
+class RegionCard(object):
+    """A single region card
+    """
+    
+    def __init__(self, region, kind):
+        """Region may be None and kind may be '*'.
+        """
+        self.region = region
+        self.kind = kind
 
-    def draw(self,deck):
-        card = deck.pick()
-        if card:
-            self.playerc.append(card)
-        print self.playerc
-        self.check(self.playerc)
-        
-    def check(self, playerc):
-        if len(playerc)==5:
-            print "You must trade your cards!"
-            reinforcements = self.trade(playerc)
-            
-    def trade(self,playerc):
-        tr1 = tr2 = tr3 = [2]
-        c1 = int(raw_input("Which cards you want to trade? (type something like '1' or '2' etc.)\n"))
-        c2 = int(raw_input())
-        c3 = int(raw_input())
-
-        tr1 = playerc[c1-1].rsplit()
-        tr2 = playerc[c2-1].rsplit()
-        tr3 = playerc[c3-1].rsplit()
-
-        if tr1[0]==tr2[0]==tr3[0]=='inf':
-            reinf = 4
-        elif tr1[0]==tr2[0]==tr3[0]=='art':
-            reinf = 6
-        elif tr1[0]==tr2[0]==tr3[0]=='cav':
-            reinf = 8
-        elif tr1[0]!=tr2[0]!=tr3[0]:
-            reinf = 10
+    def is_wild(self):
+        """Returns True if card is wildcard, False otherwise.
+        """
+        if self.kind == "*":
+            return True
         else:
-            print "invalid trade"
-            self.trade(playerc)
-        
-        del playerc[c3-1]
-        del playerc[c2-1]
-        del playerc[c1-1]
-        print "Your cards now:", playerc
-        print "You take ", reinf, "reinforcements!"
-        return reinf
+            return False
 
 if __name__=="__main__":        
     deck = Deck()
