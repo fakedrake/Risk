@@ -18,7 +18,7 @@ setup(
     keywords = "risk game",
     url = "http://packages.python.org/Risk",
     packages=['risk', 'risk.test'],
-    install_requires=['nose', 'networkx'],
+    install_requires=['nose', 'networkx','mock'],
     long_description=read('README.txt'),
     test_suite='risk.test',
     classifiers=[

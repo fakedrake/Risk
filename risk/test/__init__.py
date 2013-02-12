@@ -1,1 +1,2 @@
 import test_resource
+import test_battle

@@ -31,3 +31,10 @@ class Player(object):
 
     def __repr__(self):
         return "<Player object name: \"%s\" color: \"%s\">" % (self.name, self.color)
+
+
+def playerFactory(player):
+    if isinstance(player, Player):
+        return player
+
+    return Player(*player)
