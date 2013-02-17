@@ -6,7 +6,7 @@ from .region import Region
 class MainGame(object):
     """Contains all that was, is and will be during a game session
     """
-    
+
     def __init__(self):
         """Creates all the needed objects for the game to run
         """
@@ -19,7 +19,7 @@ class MainGame(object):
             ]
         self.gui = Gui("./LOTR_Risk_indexed_map.jpg")
         board = Board(self.players, "./resources/regions.txt", self.gui)
-        
+
     def game_loop(self):
         """Cycle through players and call player_turn for each one of them until
         player quits or game is over
@@ -36,5 +36,3 @@ class MainGame(object):
         """Plays out a single player turn and returns True if the game is over or
         False otherwise.
         """
-
-        
