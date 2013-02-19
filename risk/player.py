@@ -14,7 +14,7 @@ class Player(object):
 
     def regions(self):
         """Return the player's regions as objects."""
-        return self.board.regions(self)
+        return self.board.player_regions(self)
 
     def __str__(self):
         return self.name
